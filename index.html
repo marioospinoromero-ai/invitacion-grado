@@ -311,7 +311,10 @@ function esc(t){return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt
     if(!res.valido) return;
     const n=Number(res.cupo)||0;
     $('#gNombre').textContent=res.nombre||'';
-    $('#gReserva').textContent='Hemos reservado '+n+' '+(n
+    $('#gReserva').textContent='Hemos reservado '+n+' '+(n==1?'lugar':'lugares')+' en tu honor';
+    $('#guest').hidden=false;
+  }catch(e){ console.error(e); }
+})();
 </script>
 </body>
 </html>
