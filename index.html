@@ -232,7 +232,8 @@ async function cargarInvitacion(cod){
     codigoActual=cod;
     const cupo=Number(res.cupo)||1;
     llenarPersonas(cupo);
-    $('#cupoInfo').innerHTML='Tu familia tiene <b>'+cupo+'</b> '+(cupo===1?'cupo disponible':'cupos disponibles')+'.';
+    const saludo = res.nombre ? 'Hola, <b>'+esc(res.nombre)+'</b>. ' : '';
+    $('#cupoInfo').innerHTML=saludo+'Tu familia tiene <b>'+cupo+'</b> '+(cupo===1?'cupo disponible':'cupos disponibles')+'.';
     $('#cupoInfo').hidden=false;
     $('#resto').hidden=false;
   }catch(err){
