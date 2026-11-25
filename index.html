@@ -74,6 +74,11 @@ button.env2:disabled{opacity:.6;cursor:wait}
 #guest .gr{font:600 13px 'Cormorant Garamond',serif;letter-spacing:.22em;text-transform:uppercase;margin-top:6px}
 #top .a{color:#4A0E14}
 #top .b{color:#7A1C26}
+.rf{position:absolute;width:150px;height:auto;pointer-events:none;z-index:0}
+.rf.tl{left:-16px;top:-14px}
+.rf.tr{right:-16px;top:-14px;transform:scaleX(-1)}
+.rf.bl{left:-16px;bottom:-14px;transform:scaleY(-1)}
+.rf.br{right:-16px;bottom:-14px;transform:scale(-1,-1)}
 </style>
 </head>
 <body>
@@ -87,6 +92,55 @@ button.env2:disabled{opacity:.6;cursor:wait}
 
 <div id="escena" role="button" tabindex="0" aria-label="Abrir invitación">
  <div id="lienzo">
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="rosa" viewBox="0 0 100 100">
+<circle cx="50" cy="50" r="46" fill="#8f1a2e"/>
+<path d="M50 8C75 14 90 34 88 52C86 72 70 88 50 90C30 88 14 72 12 52C10 34 25 14 50 8Z" fill="#b5283f"/>
+<path d="M50 20C68 26 78 40 76 54C74 68 62 78 50 80C38 78 26 68 24 54C22 40 32 26 50 20Z" fill="#861527"/>
+<path d="M50 32C60 36 64 46 62 54C60 62 54 66 50 66C44 66 40 62 38 54C36 46 40 36 50 32Z" fill="#5e0d1d"/>
+<path d="M50 42C55 44 56 49 53 52C50 55 46 53 47 50" fill="none" stroke="#e7a1ad" stroke-width="2"/>
+</symbol>
+<symbol id="hoja" viewBox="0 0 60 120">
+<path d="M30 118C4 90 2 40 30 2C58 40 56 90 30 118Z" fill="#6b1322"/>
+<path d="M30 116L30 14" stroke="#b9485c" stroke-width="2" fill="none"/>
+</symbol>
+<symbol id="capullo" viewBox="0 0 60 60">
+<ellipse cx="30" cy="32" rx="20" ry="22" fill="#a52239"/>
+<path d="M14 30C18 14 42 14 46 30C40 24 20 24 14 30Z" fill="#c9455c"/>
+</symbol>
+</defs></svg>
+<svg class="rf tl" viewBox="0 0 220 220" aria-hidden="true">
+<use href="#hoja" x="-4" y="36" width="58" height="118" transform="rotate(-42 25 95)"/>
+<use href="#hoja" x="58" y="-6" width="40" height="104" transform="rotate(28 78 46)"/>
+<use href="#hoja" x="8" y="96" width="36" height="92" transform="rotate(-15 26 140)"/>
+<use href="#rosa" x="8" y="18" width="112" height="112"/>
+<use href="#rosa" x="96" y="-4" width="58" height="58"/>
+<use href="#capullo" x="88" y="92" width="44" height="44" transform="rotate(20 110 114)"/>
+</svg>
+<svg class="rf tr" viewBox="0 0 220 220" aria-hidden="true">
+<use href="#hoja" x="-4" y="36" width="58" height="118" transform="rotate(-42 25 95)"/>
+<use href="#hoja" x="58" y="-6" width="40" height="104" transform="rotate(28 78 46)"/>
+<use href="#hoja" x="8" y="96" width="36" height="92" transform="rotate(-15 26 140)"/>
+<use href="#rosa" x="8" y="18" width="112" height="112"/>
+<use href="#rosa" x="96" y="-4" width="58" height="58"/>
+<use href="#capullo" x="88" y="92" width="44" height="44" transform="rotate(20 110 114)"/>
+</svg>
+<svg class="rf bl" viewBox="0 0 220 220" aria-hidden="true">
+<use href="#hoja" x="-4" y="36" width="58" height="118" transform="rotate(-42 25 95)"/>
+<use href="#hoja" x="58" y="-6" width="40" height="104" transform="rotate(28 78 46)"/>
+<use href="#hoja" x="8" y="96" width="36" height="92" transform="rotate(-15 26 140)"/>
+<use href="#rosa" x="8" y="18" width="112" height="112"/>
+<use href="#rosa" x="96" y="-4" width="58" height="58"/>
+<use href="#capullo" x="88" y="92" width="44" height="44" transform="rotate(20 110 114)"/>
+</svg>
+<svg class="rf br" viewBox="0 0 220 220" aria-hidden="true">
+<use href="#hoja" x="-4" y="36" width="58" height="118" transform="rotate(-42 25 95)"/>
+<use href="#hoja" x="58" y="-6" width="40" height="104" transform="rotate(28 78 46)"/>
+<use href="#hoja" x="8" y="96" width="36" height="92" transform="rotate(-15 26 140)"/>
+<use href="#rosa" x="8" y="18" width="112" height="112"/>
+<use href="#rosa" x="96" y="-4" width="58" height="58"/>
+<use href="#capullo" x="88" y="92" width="44" height="44" transform="rotate(20 110 114)"/>
+</svg>
   <div id="top"><div class="b">Estás cordialmente invitado a la graduación de</div><div class="a">Naiduth &amp; Sharon</div></div>
   <div id="stage">
    <div class="ly" id="inter" style="z-index:0;background:linear-gradient(180deg,#220509,#3a0b12);clip-path:polygon(56.36px 162.75px,325.50px 165.62px,192.65px 267.41px)"></div>
