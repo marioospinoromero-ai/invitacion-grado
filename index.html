@@ -69,6 +69,11 @@ button.env2:disabled{opacity:.6;cursor:wait}
 .btn-sec{padding:0 16px;border-radius:10px;border:1.5px solid var(--vino);background:transparent;color:var(--vino);font:600 17px 'Cormorant Garamond',serif;cursor:pointer;white-space:nowrap}
 .btn-sec:disabled{opacity:.6;cursor:wait}
 .cupo{margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(201,162,74,.15);border:1px solid rgba(201,162,74,.6);text-align:center;font-size:17px}
+#guest{position:absolute;left:0;right:0;top:586px;text-align:center;color:#7A1C26;pointer-events:none}
+#guest .gn{font:400 34px/1 'Pinyon Script',cursive;color:#4A0E14}
+#guest .gr{font:600 13px 'Cormorant Garamond',serif;letter-spacing:.22em;text-transform:uppercase;margin-top:6px}
+#top .a{color:#4A0E14}
+#top .b{color:#7A1C26}
 </style>
 </head>
 <body>
@@ -82,7 +87,7 @@ button.env2:disabled{opacity:.6;cursor:wait}
 
 <div id="escena" role="button" tabindex="0" aria-label="Abrir invitación">
  <div id="lienzo">
-  <div id="top"><div class="a">Estás invitado</div><div class="b">Graduación · Naiduth &amp; Sharon</div></div>
+  <div id="top"><div class="b">Estás cordialmente invitado a la graduación de</div><div class="a">Naiduth &amp; Sharon</div></div>
   <div id="stage">
    <div class="ly" id="inter" style="z-index:0;background:linear-gradient(180deg,#220509,#3a0b12);clip-path:polygon(56.36px 162.75px,325.50px 165.62px,192.65px 267.41px)"></div>
    <div class="ly" id="flapOpen" style="z-index:5;transform-origin:0 164.2px;transform:rotateX(0deg)">
@@ -95,7 +100,8 @@ button.env2:disabled{opacity:.6;cursor:wait}
    <div class="ly" id="gL" style="z-index:7"></div><div class="ly" id="sL" style="z-index:8"></div>
    <div class="ly" id="gR" style="z-index:7"></div><div class="ly" id="sR" style="z-index:8"></div>
   </div>
-  <div id="hint">Toca para abrir</div>
+  <div id="hint">Clic aquí</div>
+<div id="guest" hidden><div class="gn" id="gNombre"></div><div class="gr" id="gReserva"></div></div>
  </div>
 </div>
 
@@ -296,6 +302,16 @@ $('#f').addEventListener('submit', async e=>{
 });
 function esc(t){return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
+(async()=>{
+  const c=(new URLSearchParams(location.search).get('c')||'').trim().toUpperCase();
+  if(!c) return;
+  try{
+    const r=await fetch(ENDPOINT+'?accion=verificar&codigo='+encodeURIComponent(c));
+    const res=await r.json();
+    if(!res.valido) return;
+    const n=Number(res.cupo)||0;
+    $('#gNombre').textContent=res.nombre||'';
+    $('#gReserva').textContent='Hemos reservado '+n+' '+(n
 </script>
 </body>
 </html>
