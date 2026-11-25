@@ -3,316 +3,431 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación a mi grado</title>
+<title>Estás invitado · Graduación</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy-1: #0b1d33;
-    --navy-2: #14365c;
-    --gold: #d4af37;
-    --gold-soft: #f1dc8f;
-    --cream: #f7f1e3;
-    --muted: #b8c2d1;
-    --glass: rgba(255, 255, 255, .06);
-    --line: rgba(212, 175, 55, .35);
-    --ok: #7fd6a0;
-    --err: #ff8a80;
+    --vino: #6e1a2c;
+    --vino-oscuro: #3e0c18;
+    --vino-medio: #7d2236;
+    --oro: #c9a24a;
+    --oro-claro: #f1dc96;
+    --crema: #f6efdf;
+    --texto: #5a1a26;
+    --gris: #8a7a7e;
+    --ok: #2e7d4f;
+    --err: #b3261e;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
-    font-family: "Montserrat", "Segoe UI", system-ui, sans-serif;
+    font-family: "Montserrat", system-ui, sans-serif;
     font-weight: 300;
-    color: var(--cream);
-    background:
-      radial-gradient(1200px 600px at 10% -10%, rgba(212,175,55,.18), transparent 60%),
-      radial-gradient(900px 500px at 110% 10%, rgba(46,109,164,.35), transparent 60%),
-      linear-gradient(180deg, var(--navy-2), var(--navy-1));
+    color: var(--texto);
+    background: var(--vino-oscuro);
     min-height: 100vh;
-    line-height: 1.6;
   }
-  .wrap { max-width: 580px; margin: 0 auto; padding: 28px 18px 56px; }
+  [hidden] { display: none !important; }
 
-  /* ---------- HERO ---------- */
-  .hero {
-    position: relative;
+  /* ================= INTRO: SOBRE ================= */
+  #intro {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #ffffff;
+    transition: background .9s ease, opacity .8s ease .2s;
+    padding: 24px;
     text-align: center;
-    padding: 46px 24px 40px;
-    border-radius: 24px;
-    background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-    border: 1px solid var(--line);
-    box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 0 0 6px rgba(11,29,51,.4), inset 0 0 0 7px rgba(212,175,55,.25);
-    animation: subir .9s ease both;
   }
-  .birrete { font-size: 46px; filter: drop-shadow(0 4px 12px rgba(212,175,55,.35)); }
-  .tag {
-    margin-top: 10px;
-    font-size: 12px;
+  #intro.oscuro { background: radial-gradient(ellipse at center, #7d2236 0%, #4a0f1c 60%, #2e0911 100%); }
+  #intro.fuera { opacity: 0; pointer-events: none; }
+
+  .titulo-script {
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(44px, 10vw, 64px);
+    color: var(--vino);
+    margin: 0;
+    line-height: 1.1;
+    transition: opacity .5s ease;
+  }
+  .kicker {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 13px;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--gold-soft);
+    color: var(--vino);
+    margin: 8px 0 34px;
+    transition: opacity .5s ease;
   }
-  .hero h1 {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-weight: 700;
-    font-size: 48px;
-    line-height: 1.05;
-    margin: 12px 0 8px;
-    background: linear-gradient(120deg, #fff6d5, var(--gold), #fff6d5);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .programa { margin: 0; color: var(--muted); font-size: 14px; letter-spacing: .5px; }
-  .ornamento {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    margin: 20px auto 0; color: var(--gold);
-  }
-  .ornamento::before, .ornamento::after {
-    content: ""; height: 1px; width: 70px; background: linear-gradient(90deg, transparent, var(--gold));
-  }
-  .ornamento::after { transform: scaleX(-1); }
-  .invita { margin: 18px 0 0; font-family: "Cormorant Garamond", Georgia, serif; font-size: 20px; font-style: italic; color: var(--cream); }
+  #intro.oscuro .titulo-script,
+  #intro.oscuro .kicker,
+  #intro.oscuro .abrir { opacity: 0; }
 
-  /* ---------- CUENTA REGRESIVA ---------- */
-  .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 22px; }
-  .countdown div {
-    background: var(--glass); border: 1px solid var(--line); border-radius: 14px; padding: 12px 4px;
+  .sobre {
+    position: relative;
+    width: min(78vw, 340px);
+    aspect-ratio: 1.5 / 1;
+    cursor: pointer;
+    transition: transform .6s ease;
   }
-  .countdown b { display: block; font-family: "Cormorant Garamond", serif; font-size: 30px; color: var(--gold-soft); line-height: 1; }
-  .countdown span { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .sobre .trasera {
+    position: absolute; inset: 0; border-radius: 4px;
+    background: #5a1222;
+    box-shadow: 0 22px 40px rgba(60, 10, 20, .35);
+  }
+  .sobre .tarjeta {
+    position: absolute; left: 9%; right: 9%; top: 12%; bottom: 12%;
+    background: var(--crema);
+    border: 1px solid var(--oro);
+    z-index: 1;
+    transition: transform 1.1s cubic-bezier(.2,.8,.2,1) .35s;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px;
+  }
+  .sobre .tarjeta::before {
+    content: ""; position: absolute; inset: 5px; border: 1px solid rgba(201,162,74,.6);
+  }
+  .sobre .tarjeta small {
+    font-family: "Cormorant Garamond", serif; font-size: clamp(8px, 2.2vw, 11px);
+    letter-spacing: 3px; text-transform: uppercase; color: var(--vino);
+  }
+  .sobre .tarjeta .nom {
+    font-family: "Great Vibes", cursive; font-size: clamp(22px, 6vw, 34px); color: var(--vino); line-height: 1;
+  }
+  .sobre .frente {
+    position: absolute; inset: 0; z-index: 2; background: var(--vino-medio);
+    clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+  }
+  .sobre .frente::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.12), transparent 50%);
+  }
+  .sobre .solapa {
+    position: absolute; left: 0; right: 0; top: 0; height: 56%; z-index: 3;
+    background: linear-gradient(180deg, #86283e, #6e1a2c);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .8s cubic-bezier(.5,0,.3,1);
+  }
+  .sobre .sello {
+    position: absolute; left: 50%; top: 50%; z-index: 4;
+    width: 64px; height: 64px; transform: translate(-50%, -30%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f7e3a0, var(--oro) 55%, #8a6418 100%);
+    box-shadow: 0 4px 10px rgba(0,0,0,.35), inset 0 0 0 3px rgba(255,255,255,.25);
+    display: grid; place-items: center;
+    font-family: "Great Vibes", cursive; font-size: 26px; color: #5b3d0c;
+    transition: opacity .3s ease;
+  }
+  .sobre:hover .solapa { transform: rotateX(8deg); }
 
-  /* ---------- TARJETAS ---------- */
-  .card {
-    background: var(--glass);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 26px 24px;
-    margin-top: 18px;
-    backdrop-filter: blur(6px);
-    animation: subir .9s ease both;
-  }
-  .card:nth-of-type(2) { animation-delay: .1s; }
-  .card:nth-of-type(3) { animation-delay: .2s; }
-  h2 {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-weight: 700; font-size: 28px; margin: 0 0 6px; color: var(--gold-soft);
-  }
-  .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+  /* Estados de apertura */
+  #intro.abriendo .solapa { transform: rotateX(180deg); z-index: 0; }
+  #intro.abriendo .sello { opacity: 0; }
+  #intro.abriendo .tarjeta { transform: translateY(-62%); }
+  #intro.abriendo .sobre { transform: scale(1.05); }
 
-  .detalle { display: grid; gap: 14px; margin-top: 6px; }
-  .detalle .fila { display: flex; gap: 14px; align-items: center; }
-  .detalle .icono {
-    width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px;
-    background: rgba(212,175,55,.12); border: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: center; font-size: 19px;
-  }
-  .detalle small { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
-  .detalle strong { font-weight: 600; font-size: 15px; }
-
-  .btn-calendario {
-    display: inline-block; margin-top: 16px; font-size: 13px; color: var(--gold-soft);
-    text-decoration: none; border-bottom: 1px dashed var(--gold); padding-bottom: 2px;
+  .abrir {
+    margin-top: 40px;
+    font-family: "Montserrat", sans-serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--vino); background: none; border: none; cursor: pointer;
+    padding: 8px 14px; transition: opacity .5s ease;
+    border-bottom: 1px solid var(--oro);
   }
 
-  /* ---------- FORMULARIO ---------- */
-  form label { display: block; font-weight: 600; font-size: 13px; letter-spacing: .5px; margin: 18px 0 8px; color: var(--cream); }
+  /* ================= INVITACIÓN ================= */
+  #invitacion {
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: flex-start;
+    padding: 36px 14px 60px;
+    background:
+      radial-gradient(900px 500px at 50% 0%, rgba(125,34,54,.7), transparent 70%),
+      linear-gradient(180deg, #4a0f1c, var(--vino-oscuro));
+    opacity: 0; transition: opacity 1s ease;
+  }
+  #invitacion.visible { opacity: 1; }
+
+  .tarjeta-final {
+    position: relative;
+    width: min(94vw, 430px);
+    background: linear-gradient(180deg, #f8f2e4, #f2e8d2);
+    border-radius: 14px;
+    padding: 18px 16px 26px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.45);
+    border: 1px solid var(--oro);
+    overflow: hidden;
+  }
+  .tarjeta-final::before {
+    content: ""; position: absolute; inset: 8px; border: 1px solid rgba(201,162,74,.7); border-radius: 10px; pointer-events: none;
+  }
+
+  /* Arco de cabecera */
+  .cabecera {
+    position: relative;
+    margin: 6px 6px 0;
+    padding: 36px 16px 26px;
+    background: linear-gradient(180deg, #8a2a40, var(--vino));
+    border-radius: 160px 160px 14px 14px / 120px 120px 14px 14px;
+    border: 2px solid var(--oro);
+    text-align: center;
+    color: var(--crema);
+  }
+  .cabecera .eyebrow {
+    font-family: "Cormorant Garamond", serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+    margin: 0 0 4px; color: var(--oro-claro);
+  }
+  .nombres {
+    font-family: "Great Vibes", cursive; font-weight: 400;
+    font-size: clamp(46px, 13vw, 66px); line-height: .95; margin: 0; color: #fff3d6;
+  }
+  .nombres em { font-family: "Cormorant Garamond", serif; font-style: italic; color: var(--oro-claro); font-size: .7em; display: inline-block; transform: translateY(-.1em); }
+  .cabecera .fiesta {
+    margin: 14px 0 0; font-family: "Cormorant Garamond", serif; font-size: 13px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--oro-claro);
+  }
+
+  .texto {
+    margin: 22px 10px 0; text-align: center;
+    font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 17px; line-height: 1.5; color: var(--texto);
+  }
+  .adorno { text-align: center; color: var(--oro); margin: 14px 0 4px; font-size: 16px; }
+
+  /* Detalles */
+  .detalles { display: grid; gap: 9px; margin: 14px 10px 0; }
+  .detalle {
+    text-align: center; padding: 10px 12px;
+    background: linear-gradient(180deg, #efe2c4, #e6d4ab);
+    border: 1px solid rgba(201,162,74,.8); border-radius: 10px;
+  }
+  .detalle small {
+    display: block; font-family: "Cormorant Garamond", serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--vino);
+  }
+  .detalle strong {
+    font-family: "Cormorant Garamond", serif; font-weight: 700; font-size: 18px; color: var(--vino-oscuro);
+  }
+  .agenda {
+    display: block; text-align: center; margin: 10px 0 0; font-size: 12px; color: var(--vino); text-decoration: none; border-bottom: 1px dashed var(--oro);
+  }
+
+  /* RSVP */
+  .rsvp { margin: 24px 10px 0; padding-top: 18px; border-top: 1px solid rgba(201,162,74,.6); }
+  .rsvp h2 {
+    font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 26px; margin: 0; text-align: center; color: var(--vino);
+  }
+  .rsvp .sub { text-align: center; font-family: "Cormorant Garamond", serif; font-style: italic; color: var(--gris); margin: 4px 0 8px; font-size: 15px; }
+
+  form label { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin: 14px 0 6px; color: var(--vino); font-weight: 600; }
   form input[type="text"], form input[type="number"], form textarea {
-    width: 100%;
-    padding: 13px 15px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.15);
-    background: rgba(5,15,30,.55);
-    color: var(--cream);
-    font: inherit;
-    font-size: 15px;
-    transition: border-color .2s, box-shadow .2s;
+    width: 100%; padding: 11px 13px; font: inherit; font-size: 15px; color: var(--texto);
+    background: #fffaf0; border: 1px solid rgba(110,26,44,.25); border-radius: 10px;
   }
-  form input::placeholder, form textarea::placeholder { color: #7f8ba0; }
-  form input:focus, form textarea:focus {
-    outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,.2);
-  }
-  form textarea { min-height: 84px; resize: vertical; }
+  form input:focus, form textarea:focus { outline: none; border-color: var(--oro); box-shadow: 0 0 0 3px rgba(201,162,74,.25); }
+  form textarea { min-height: 70px; resize: vertical; }
 
-  .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .opciones label {
-    margin: 0; cursor: pointer; text-align: center; font-weight: 400;
-    border: 1px solid rgba(255,255,255,.15); border-radius: 14px; padding: 16px 10px;
-    background: rgba(5,15,30,.4); transition: all .2s;
+    margin: 0; text-align: center; font-size: 13px; letter-spacing: .3px; text-transform: none; font-weight: 400;
+    padding: 12px 8px; border: 1px solid rgba(110,26,44,.25); border-radius: 10px; background: #fffaf0; cursor: pointer; color: var(--texto);
+    transition: all .2s;
   }
-  .opciones label:hover { border-color: var(--gold); }
   .opciones input { position: absolute; opacity: 0; pointer-events: none; }
   .opciones label:has(input:checked) {
-    border-color: var(--gold);
-    background: linear-gradient(160deg, rgba(212,175,55,.25), rgba(212,175,55,.08));
-    box-shadow: 0 0 0 2px rgba(212,175,55,.25);
-    font-weight: 600; color: #fff;
+    background: linear-gradient(180deg, #7d2236, var(--vino)); color: #fff3d6; border-color: var(--vino); font-weight: 600;
   }
-  .opciones label .emoji { display: block; font-size: 24px; margin-bottom: 4px; }
 
-  .contador { display: flex; align-items: center; gap: 12px; }
+  .contador { display: flex; align-items: center; gap: 10px; }
   .contador button.paso {
-    width: 44px; height: 44px; margin: 0; padding: 0; border-radius: 12px; font-size: 22px;
-    background: rgba(212,175,55,.15); color: var(--gold-soft); border: 1px solid var(--line);
+    width: 40px; height: 40px; margin: 0; padding: 0; border-radius: 10px; font-size: 20px; cursor: pointer;
+    background: #fffaf0; color: var(--vino); border: 1px solid rgba(110,26,44,.3);
   }
-  .contador input { width: 80px !important; text-align: center; }
+  .contador input { width: 76px !important; text-align: center; }
 
   button.enviar {
-    margin-top: 24px; width: 100%; padding: 16px; border: none; border-radius: 14px;
-    background: linear-gradient(120deg, #e9c74d, var(--gold), #b8921f);
-    color: #1b1400; font: inherit; font-size: 15px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 25px rgba(212,175,55,.3);
-    transition: transform .15s, box-shadow .15s;
+    margin-top: 20px; width: 100%; padding: 14px; border: none; border-radius: 12px; cursor: pointer;
+    background: linear-gradient(180deg, #8a2a40, var(--vino)); color: #fff3d6;
+    font: inherit; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+    box-shadow: 0 8px 18px rgba(110,26,44,.35);
   }
-  button.enviar:hover { transform: translateY(-1px); box-shadow: 0 14px 30px rgba(212,175,55,.4); }
-  button.enviar:disabled { opacity: .6; cursor: default; transform: none; }
+  button.enviar:disabled { opacity: .6; cursor: default; }
 
-  .estado { margin-top: 14px; font-size: 14px; min-height: 22px; text-align: center; }
-  .estado.ok { color: var(--ok); }
+  .estado { margin-top: 12px; font-size: 14px; min-height: 20px; text-align: center; }
   .estado.err { color: var(--err); }
 
-  /* ---------- GRACIAS ---------- */
-  .gracias { text-align: center; display: none; }
-  .gracias .check { font-size: 58px; }
-  .gracias p { color: var(--muted); }
+  .gracias { text-align: center; padding: 10px 0 0; }
+  .gracias .check { font-family: "Great Vibes", cursive; font-size: 46px; color: var(--vino); margin: 0; }
+  .gracias p { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 18px; margin: 8px 0 0; }
 
-  .pie { text-align: center; color: var(--muted); font-size: 13px; margin-top: 28px; letter-spacing: .5px; }
-  .pie b { color: var(--gold-soft); font-weight: 600; }
+  .pie {
+    text-align: center; margin-top: 18px; font-family: "Cormorant Garamond", serif; font-style: italic; color: var(--oro-claro); font-size: 15px;
+  }
 
-  @keyframes subir { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  /* Tulipanes decorativos */
+  .tulipan { position: absolute; width: 56px; height: auto; pointer-events: none; }
+  .tulipan.a { top: -6px; left: -8px; transform: rotate(-18deg); }
+  .tulipan.b { bottom: -6px; right: -8px; transform: rotate(20deg); }
 
-  @media (max-width: 480px) {
-    .hero h1 { font-size: 38px; }
-    .countdown b { font-size: 24px; }
+  @media (max-width: 380px) {
+    .opciones { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<!-- ==================== CONFIGURACIÓN (edita aquí) ==================== -->
+<script>
+  const CONFIG = {
+    graduados:  ["Naiduth", "Sharon"],
+    programa:   "Graduación",
+    fecha:      "Sábado 19 de diciembre · 2026",
+    hora:       "8:00 p. m.",
+    lugar:      "Fundación Magdalena · Mi casa",
+    fechaISO:   "2026-12-19T20:00:00",      // para el enlace de calendario
+    // URL del Apps Script (termina en /exec)
+    endpoint:   "https://script.google.com/macros/s/AKfycbx5JWLLqT0aG0utAz4A28Zn7ahAQc8mRNE6kIA7kmBjF1GAHYEj2NYUT6puUM6J8eYF/exec",
+    formsRespaldo: ""
+  };
+</script>
 
-  <!-- ==================== CONFIGURACIÓN (edita aquí) ==================== -->
-  <script>
-    const CONFIG = {
-      graduado:   "[Tu nombre]",
-      programa:   "Maestría en Analítica y Ciencia de Datos",
-      fecha:      "[Día, fecha]",           // texto que se muestra
-      hora:       "[Hora]",
-      lugar:      "[Lugar / dirección]",
-      fechaISO:   "2026-12-15T18:00:00",    // fecha real para la cuenta regresiva y el calendario (AAAA-MM-DDTHH:MM:SS)
-      // URL del Apps Script (termina en /exec). Déjala vacía mientras pruebas.
-      endpoint:   "https://script.google.com/macros/s/AKfycbx5JWLLqT0aG0utAz4A28Zn7ahAQc8mRNE6kIA7kmBjF1GAHYEj2NYUT6puUM6J8eYF/exec",
-      // Opcional: enlace de respaldo (por ejemplo, Microsoft Forms)
-      formsRespaldo: ""
-    };
-  </script>
+<!-- ==================== INTRO (sobre) ==================== -->
+<div id="intro">
+  <h1 class="titulo-script">Estás invitado</h1>
+  <p class="kicker">Graduación · <span id="kicker-nombres"></span></p>
 
-  <section class="hero">
-    <div class="birrete">🎓</div>
-    <div class="tag">Te invito a celebrar</div>
-    <h1 id="h-graduado"></h1>
-    <p class="programa" id="h-programa"></p>
-    <div class="ornamento"></div>
-    <p class="invita">Acompáñame en este momento tan especial</p>
-
-    <div class="countdown" id="cuenta" hidden>
-      <div><b id="c-dias">0</b><span>Días</span></div>
-      <div><b id="c-horas">0</b><span>Horas</span></div>
-      <div><b id="c-min">0</b><span>Min</span></div>
-      <div><b id="c-seg">0</b><span>Seg</span></div>
+  <div class="sobre" id="sobre" role="button" tabindex="0" aria-label="Abrir invitación">
+    <div class="trasera"></div>
+    <div class="tarjeta">
+      <small>Estás invitado</small>
+      <span class="nom" id="tarjeta-nombres"></span>
+      <small>Graduación · 2026</small>
     </div>
-  </section>
+    <div class="frente"></div>
+    <div class="solapa"></div>
+    <div class="sello" id="sello"></div>
+  </div>
 
-  <section class="card">
-    <h2>Detalles del evento</h2>
-    <div class="detalle">
-      <div class="fila"><span class="icono">📅</span><div><small>Fecha</small><strong id="d-fecha"></strong></div></div>
-      <div class="fila"><span class="icono">🕐</span><div><small>Hora</small><strong id="d-hora"></strong></div></div>
-      <div class="fila"><span class="icono">📍</span><div><small>Lugar</small><strong id="d-lugar"></strong></div></div>
-    </div>
-    <a class="btn-calendario" id="cal" href="#" target="_blank" rel="noopener">+ Agregar a mi calendario</a>
-  </section>
-
-  <!-- ==================== FORMULARIO ==================== -->
-  <section class="card" id="bloque-form">
-    <h2>Confirma tu asistencia</h2>
-    <p class="sub">Por favor responde antes del día del evento. ¡Gracias!</p>
-
-    <form id="form" autocomplete="off">
-      <label for="nombre">Nombre completo *</label>
-      <input type="text" id="nombre" maxlength="120" required placeholder="Ej. María López">
-
-      <label>¿Asistirás? *</label>
-      <div class="opciones">
-        <label><input type="radio" name="asiste" value="Sí" required><span class="emoji">✨</span>Sí, asistiré</label>
-        <label><input type="radio" name="asiste" value="No"><span class="emoji">💌</span>No podré ir</label>
-      </div>
-
-      <label>Número de acompañantes</label>
-      <div class="contador">
-        <button type="button" class="paso" id="menos">−</button>
-        <input type="number" id="acompanantes" min="0" max="10" value="0">
-        <button type="button" class="paso" id="mas">+</button>
-      </div>
-
-      <label for="mensaje">Un mensaje para mí (opcional)</label>
-      <textarea id="mensaje" maxlength="500" placeholder="Escribe unas palabras…"></textarea>
-
-      <button type="submit" class="enviar" id="btn">Confirmar asistencia</button>
-      <div class="estado" id="estado" role="status"></div>
-    </form>
-  </section>
-
-  <!-- ==================== GRACIAS ==================== -->
-  <section class="card gracias" id="gracias">
-    <div class="check">🎓</div>
-    <h2 id="g-titulo">¡Gracias por confirmar!</h2>
-    <p id="g-texto"></p>
-  </section>
-
-  <div class="pie">Con cariño, <b id="pie-nombre"></b></div>
+  <button class="abrir" id="abrir" type="button">Toca para abrir</button>
 </div>
+
+<!-- ==================== INVITACIÓN ==================== -->
+<main id="invitacion" hidden>
+  <article class="tarjeta-final">
+
+    <!-- Tulipanes -->
+    <svg class="tulipan a" viewBox="0 0 60 120" aria-hidden="true">
+      <path d="M30 118 C30 90 28 70 30 50" stroke="#4f7a4a" stroke-width="3" fill="none"/>
+      <path d="M30 80 C12 70 8 52 14 40 C22 52 28 62 30 80Z" fill="#6aa165"/>
+      <path d="M30 60 C46 50 52 36 46 24 C38 36 32 46 30 60Z" fill="#6aa165"/>
+      <path d="M18 14 C18 2 42 2 42 14 C42 30 36 38 30 40 C24 38 18 30 18 14Z" fill="#d86a86"/>
+      <path d="M30 14 L30 36" stroke="#b5496a" stroke-width="1.5"/>
+    </svg>
+    <svg class="tulipan b" viewBox="0 0 60 120" aria-hidden="true">
+      <path d="M30 118 C30 90 28 70 30 50" stroke="#4f7a4a" stroke-width="3" fill="none"/>
+      <path d="M30 80 C12 70 8 52 14 40 C22 52 28 62 30 80Z" fill="#6aa165"/>
+      <path d="M30 60 C46 50 52 36 46 24 C38 36 32 46 30 60Z" fill="#6aa165"/>
+      <path d="M18 14 C18 2 42 2 42 14 C42 30 36 38 30 40 C24 38 18 30 18 14Z" fill="#e58aa3"/>
+      <path d="M30 14 L30 36" stroke="#c2587a" stroke-width="1.5"/>
+    </svg>
+
+    <header class="cabecera">
+      <p class="eyebrow">¡Nos graduamos!</p>
+      <h1 class="nombres" id="h-nombres"></h1>
+      <p class="fiesta">Fiesta de graduación</p>
+    </header>
+
+    <p class="texto">Después de años de esfuerzo, llegó el momento de celebrar juntas. Queremos compartir este día tan especial contigo.</p>
+    <div class="adorno">✦</div>
+
+    <section class="detalles">
+      <div class="detalle"><small>Fecha</small><strong id="d-fecha"></strong></div>
+      <div class="detalle"><small>Hora</small><strong id="d-hora"></strong></div>
+      <div class="detalle"><small>Lugar</small><strong id="d-lugar"></strong></div>
+    </section>
+    <a class="agenda" id="cal" href="#" target="_blank" rel="noopener">+ Agregar a mi calendario</a>
+
+    <section class="rsvp" id="bloque-form">
+      <h2>¿Nos acompañas?</h2>
+      <p class="sub">Confirma tu asistencia antes del día del evento</p>
+
+      <form id="form" autocomplete="off">
+        <label for="nombre">Nombre completo *</label>
+        <input type="text" id="nombre" maxlength="120" required placeholder="Escribe tu nombre">
+
+        <label>¿Asistirás? *</label>
+        <div class="opciones">
+          <label><input type="radio" name="asiste" value="Sí" required>Sí, asistiré</label>
+          <label><input type="radio" name="asiste" value="No">No podré ir</label>
+        </div>
+
+        <label>Acompañantes</label>
+        <div class="contador">
+          <button type="button" class="paso" id="menos">−</button>
+          <input type="number" id="acompanantes" min="0" max="10" value="0">
+          <button type="button" class="paso" id="mas">+</button>
+        </div>
+
+        <label for="mensaje">Un mensaje para nosotras (opcional)</label>
+        <textarea id="mensaje" maxlength="500" placeholder="Escribe unas palabras…"></textarea>
+
+        <button type="submit" class="enviar" id="btn">Confirmar asistencia</button>
+        <div class="estado" id="estado" role="status"></div>
+      </form>
+    </section>
+
+    <section class="gracias" id="gracias" hidden>
+      <p class="check">¡Gracias!</p>
+      <p id="g-texto"></p>
+    </section>
+
+    <div class="pie" id="pie"></div>
+  </article>
+</main>
 
 <script>
   const $ = (id) => document.getElementById(id);
+  const nombres = CONFIG.graduados.join(" & ");
 
-  // ----- Datos del evento -----
-  $('h-graduado').textContent = CONFIG.graduado;
-  $('h-programa').textContent = CONFIG.programa;
+  // ----- Textos -----
+  $('kicker-nombres').textContent = nombres.toUpperCase();
+  $('tarjeta-nombres').textContent = nombres;
+  $('sello').textContent = CONFIG.graduados.map(n => n[0]).join("");
+  $('h-nombres').innerHTML = CONFIG.graduados[0] + ' <em>&amp;</em><br>' + CONFIG.graduados[1];
   $('d-fecha').textContent = CONFIG.fecha;
   $('d-hora').textContent = CONFIG.hora;
   $('d-lugar').textContent = CONFIG.lugar;
-  $('pie-nombre').textContent = CONFIG.graduado;
+  $('pie').textContent = "Con cariño, " + nombres;
 
-  // ----- Cuenta regresiva y calendario -----
-  const fechaEvento = new Date(CONFIG.fechaISO);
-  if (!isNaN(fechaEvento)) {
-    $('cuenta').hidden = false;
-    const actualizar = () => {
-      const diff = Math.max(0, fechaEvento - new Date());
-      $('c-dias').textContent  = Math.floor(diff / 86400000);
-      $('c-horas').textContent = Math.floor(diff / 3600000) % 24;
-      $('c-min').textContent   = Math.floor(diff / 60000) % 60;
-      $('c-seg').textContent   = Math.floor(diff / 1000) % 60;
-    };
-    actualizar();
-    setInterval(actualizar, 1000);
-
+  // ----- Enlace a calendario -----
+  const inicio = new Date(CONFIG.fechaISO);
+  if (!isNaN(inicio)) {
     const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    const fin = new Date(fechaEvento.getTime() + 3 * 3600000);
+    const fin = new Date(inicio.getTime() + 4 * 3600000);
     $('cal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-      + '&text=' + encodeURIComponent('Graduación: ' + CONFIG.programa)
-      + '&dates=' + fmt(fechaEvento) + '/' + fmt(fin)
+      + '&text=' + encodeURIComponent('Graduación ' + nombres)
+      + '&dates=' + fmt(inicio) + '/' + fmt(fin)
       + '&location=' + encodeURIComponent(CONFIG.lugar);
   } else {
-    $('cal').style.display = 'none';
+    $('cal').hidden = true;
   }
+
+  // ----- Animación de apertura -----
+  const intro = $('intro');
+  const abrir = () => {
+    if (intro.classList.contains('abriendo')) return;
+    intro.classList.add('abriendo');
+    setTimeout(() => intro.classList.add('oscuro'), 700);
+    setTimeout(() => {
+      intro.classList.add('fuera');
+      $('invitacion').hidden = false;
+      requestAnimationFrame(() => $('invitacion').classList.add('visible'));
+      setTimeout(() => { intro.hidden = true; }, 900);
+    }, 2000);
+  };
+  $('sobre').addEventListener('click', abrir);
+  $('abrir').addEventListener('click', abrir);
+  $('sobre').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') abrir(); });
 
   // ----- Contador de acompañantes -----
   const acomp = $('acompanantes');
-  const ajustar = (d) => {
-    const v = Math.min(10, Math.max(0, (Number(acomp.value) || 0) + d));
-    acomp.value = v;
-  };
+  const ajustar = (d) => { acomp.value = Math.min(10, Math.max(0, (Number(acomp.value) || 0) + d)); };
   $('mas').addEventListener('click', () => ajustar(1));
   $('menos').addEventListener('click', () => ajustar(-1));
 
@@ -331,7 +446,7 @@
       asiste: form.querySelector('input[name="asiste"]:checked')?.value || '',
       acompanantes: Number(acomp.value) || 0,
       mensaje: $('mensaje').value.trim(),
-      evento: CONFIG.programa
+      evento: nombres
     };
 
     if (!datos.nombre || !datos.asiste) {
@@ -341,7 +456,7 @@
     }
     if (!CONFIG.endpoint) {
       estado.className = 'estado err';
-      estado.textContent = 'La página aún no está conectada. Avísale a la persona organizadora.';
+      estado.textContent = 'La página aún no está conectada. Avísale a las anfitrionas.';
       return;
     }
 
@@ -358,11 +473,11 @@
       const res = await r.json();
       if (!res.ok) throw new Error(res.error || 'Respuesta inválida');
 
-      $('bloque-form').style.display = 'none';
-      $('gracias').style.display = 'block';
+      $('bloque-form').hidden = true;
+      $('gracias').hidden = false;
       $('g-texto').textContent = datos.asiste === 'Sí'
-        ? `Tu confirmación quedó registrada, ${datos.nombre}. ¡Nos vemos en el evento!`
-        : `Gracias por avisar, ${datos.nombre}. Lamento que no puedas acompañarme.`;
+        ? `Tu confirmación quedó registrada, ${datos.nombre}. ¡Nos vemos en la fiesta!`
+        : `Gracias por avisar, ${datos.nombre}. Lamentamos que no puedas acompañarnos.`;
     } catch (err) {
       console.error(err);
       btn.disabled = false;
