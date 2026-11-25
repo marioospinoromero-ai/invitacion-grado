@@ -63,6 +63,12 @@ button.env2:disabled{opacity:.6;cursor:wait}
 .ok,.err{margin-top:14px;padding:14px;border-radius:8px;font-size:17px;line-height:1.45;text-align:center;display:none}
 .ok{background:var(--vino);color:var(--crema)}.ok b{color:var(--oro-c)}.err{background:#fde8e8;color:#7a1c1c}
 .pie{margin-top:18px;font-size:14px;color:var(--vino-m);letter-spacing:.08em;text-align:center}
+[hidden]{display:none!important}
+.fila-cod{display:flex;gap:8px;align-items:stretch}
+.fila-cod input{flex:1;min-width:0;text-transform:uppercase;letter-spacing:.14em}
+.btn-sec{padding:0 16px;border-radius:10px;border:1.5px solid var(--vino);background:transparent;color:var(--vino);font:600 17px 'Cormorant Garamond',serif;cursor:pointer;white-space:nowrap}
+.btn-sec:disabled{opacity:.6;cursor:wait}
+.cupo{margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(201,162,74,.15);border:1px solid rgba(201,162,74,.6);text-align:center;font-size:17px}
 </style>
 </head>
 <body>
@@ -109,23 +115,28 @@ button.env2:disabled{opacity:.6;cursor:wait}
    <h2>¿Nos acompañas?</h2>
    <p class="nota">Confirma tu asistencia aquí abajo.</p>
    <form id="f" novalidate>
-     <label for="nombre">Tu nombre</label>
-     <input id="nombre" maxlength="120" autocomplete="name" placeholder="Nombre y apellido" required>
-     <label>¿Asistirás?</label>
-     <div class="opc">
-       <div><input type="radio" name="as" id="si" value="si" checked><label for="si">Sí, asistiré</label></div>
-       <div><input type="radio" name="as" id="no" value="no"><label for="no">No podré asistir</label></div>
-     </div>
-     <div id="bloqueP">
-       <label for="personas">¿Cuántas personas asisten (contándote)?</label>
-       <select id="personas"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
-     </div>
-     <label for="tel">Teléfono (opcional)</label>
-     <input id="tel" type="tel" maxlength="40" autocomplete="tel" placeholder="Ej. 300 123 4567">
-     <label for="msj">Mensaje (opcional)</label>
-     <textarea id="msj" rows="3" maxlength="500" placeholder="Un mensaje para las graduadas"></textarea>
-     <button class="env2" id="btn" type="submit">Enviar confirmación</button>
-   </form>
+      <div class="err" id="errCod"></div>
+      <div class="cupo" id="cupoInfo" hidden></div>
+
+      <div id="resto" hidden>
+        <label for="nombre">Tu nombre</label>
+        <input id="nombre" maxlength="120" autocomplete="name" placeholder="Nombre y apellido" required>
+        <label>¿Asistirán?</label>
+        <div class="opc">
+          <div><input type="radio" name="as" id="si" value="si" checked><label for="si">Sí, asistiremos</label></div>
+          <div><input type="radio" name="as" id="no" value="no"><label for="no">No podremos asistir</label></div>
+        </div>
+        <div id="bloqueP">
+          <label for="personas">¿Cuántas personas asistirán?</label>
+          <select id="personas"></select>
+        </div>
+        <label for="tel">Teléfono (opcional)</label>
+        <input id="tel" type="tel" maxlength="40" autocomplete="tel" placeholder="Ej. 300 123 4567">
+        <label for="msj">Mensaje (opcional)</label>
+        <textarea id="msj" rows="3" maxlength="500" placeholder="Un mensaje para las graduadas"></textarea>
+        <button class="env2" id="btn" type="submit">Enviar confirmación</button>
+      </div>
+    </form>
    <div class="ok" id="ok"></div><div class="err" id="err"></div>
   </section>
   <div class="pie">Naiduth &amp; Sharon · 2026</div>
@@ -197,21 +208,66 @@ function mostrarInv(){$('#escena').style.display='none';$('#inv').style.display=
 document.querySelectorAll('input[name=as]').forEach(r=>r.addEventListener('change',()=>{
   $('#bloqueP').style.display=$('#no').checked?'none':'block';}));
 
-// Mismo Apps Script que ya usamos (doPost en Code.gs)
+// Mismo Apps Script (Code.gs). Debe estar redeplegado con la versión nueva.
 const ENDPOINT="https://script.google.com/macros/s/AKfycbx5JWLLqT0aG0utAz4A28Zn7ahAQc8mRNE6kIA7kmBjF1GAHYEj2NYUT6puUM6J8eYF/exec";
+
+let codigoActual='';
+
+function mostrarError(id,msg){ const el=$(id); el.textContent=msg; el.style.display='block'; }
+function ocultarError(id){ $(id).style.display='none'; }
+
+function llenarPersonas(n){
+  const sel=$('#personas'); sel.innerHTML='';
+  for(let i=1;i<=n;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; sel.appendChild(o); }
+}
+
+// El código viene en el enlace de la familia: ...index.html?c=CODIGO
+async function cargarInvitacion(cod){
+  try{
+    const r=await fetch(ENDPOINT+'?accion=verificar&codigo='+encodeURIComponent(cod));
+    const res=await r.json();
+    if(!res.valido){ mostrarError('#errCod','Este enlace no es válido. Revisa que esté completo o escríbenos por WhatsApp.'); return; }
+    if(res.estado){ mostrarError('#errCod','Tu familia ya registró una respuesta. ¡Gracias!'); return; }
+
+    codigoActual=cod;
+    const cupo=Number(res.cupo)||1;
+    llenarPersonas(cupo);
+    $('#cupoInfo').innerHTML='Tu familia tiene <b>'+cupo+'</b> '+(cupo===1?'cupo disponible':'cupos disponibles')+'.';
+    $('#cupoInfo').hidden=false;
+    $('#resto').hidden=false;
+  }catch(err){
+    console.error(err);
+    mostrarError('#errCod','No pudimos cargar tu invitación. Inténtalo de nuevo en un momento.');
+  }
+}
+
+const codigoEnlace=(new URLSearchParams(location.search).get('c')||'').trim().toUpperCase();
+if(codigoEnlace){ cargarInvitacion(codigoEnlace); }
+else { mostrarError('#errCod','Abre el enlace que te enviamos para confirmar tu asistencia.'); }
+
+function mensajeError(code){
+  switch(code){
+    case 'cupo_excedido': return 'Superaste el cupo de tu familia. Elige un número menor.';
+    case 'ya_respondio': return 'Tu familia ya registró una respuesta.';
+    case 'codigo_invalido': return 'El enlace ya no es válido. Escríbenos por WhatsApp.';
+    default: return 'No pudimos guardar tu respuesta. Inténtalo de nuevo en un momento.';
+  }
+}
 
 $('#f').addEventListener('submit', async e=>{
   e.preventDefault();
+  ocultarError('#err');
+  if(!codigoActual){ mostrarError('#errCod','Este enlace no es válido.'); return; }
+
   const nombre=$('#nombre').value.trim();
-  $('#err').style.display='none';
-  if(!nombre){ $('#err').textContent='Por favor escribe tu nombre.'; $('#err').style.display='block'; $('#nombre').focus(); return; }
+  if(!nombre){ mostrarError('#err','Por favor escribe tu nombre.'); $('#nombre').focus(); return; }
 
   const si=$('#si').checked;
-  const personas=Number($('#personas').value)||1;
   const datos={
+    codigo: codigoActual,
     nombre,
     asiste: si ? 'Sí' : 'No',
-    acompanantes: si ? Math.max(0, personas-1) : 0,
+    personas: si ? Number($('#personas').value) : 0,
     mensaje: $('#msj').value.trim(),
     telefono: $('#tel').value.trim(),
     evento: 'Graduación Naiduth & Sharon'
@@ -222,18 +278,19 @@ $('#f').addEventListener('submit', async e=>{
     // text/plain evita el preflight de CORS con Apps Script
     const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(datos)});
     const res=await r.json();
-    if(!res.ok) throw new Error(res.error||'Respuesta inválida');
+    if(!res.ok) throw new Error(res.error||'respuesta_invalida');
 
     $('#f').style.display='none';
+    $('#cupoInfo').hidden=true;
+    $('#errCod').style.display='none';
     $('#ok').innerHTML = si
-      ? '<b>¡Gracias, '+esc(nombre)+'!</b><br>Tu asistencia quedó confirmada para el sábado 19 de diciembre a las 8:00 p. m. en Fundación Magdalena.'
-      : '<b>Gracias por avisarnos, '+esc(nombre)+'.</b><br>Lamentamos que no puedas acompañarnos. ¡Un abrazo!';
+      ? '<b>¡Gracias, '+esc(nombre)+'!</b><br>Su asistencia quedó confirmada para el sábado 19 de diciembre a las 8:00 p. m. en Fundación Magdalena.'
+      : '<b>Gracias por avisarnos, '+esc(nombre)+'.</b><br>Lamentamos que no puedan acompañarnos. ¡Un abrazo!';
     $('#ok').style.display='block';
   }catch(err){
     console.error(err);
     btn.disabled=false; btn.textContent='Enviar confirmación';
-    $('#err').textContent='No pudimos guardar tu respuesta. Inténtalo de nuevo en un momento.';
-    $('#err').style.display='block';
+    mostrarError('#err', mensajeError(String(err.message||'')));
   }
 });
 function esc(t){return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
