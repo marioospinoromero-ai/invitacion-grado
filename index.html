@@ -260,25 +260,56 @@ async function cargarInvitacion(cod){
   try{
     const r=await fetch(ENDPOINT+'?accion=verificar&codigo='+encodeURIComponent(cod));
     const res=await r.json();
-    if(!res.valido){ mostrarError('#errCod','Este enlace no es válido. Revisa que esté completo o escríbenos por WhatsApp.'); return; }
-    if(res.estado){ mostrarError('#errCod','Tu familia ya registró una respuesta. ¡Gracias!'); return; }
-
+    if(!res.valido){
+      $('#resto').hidden=true; $('#cupoInfo').hidden=true; $('#guest').hidden=true;
+      mostrarError('#errCod','Este enlace no es válido. Revisa que esté completo o escríbenos por WhatsApp.');
+      return;
+    }
+    if(res.estado){
+      $('#resto').hidden=true; $('#cupoInfo').hidden=true; $('#guest').hidden=true;
+      mostrarError('#errCod','Tu familia ya registró una respuesta. ¡Gracias!');
+      return;
+    }
     codigoActual=cod;
+    const nombre=res.nombre||nombreEnlace;
     const cupo=Number(res.cupo)||1;
-    llenarPersonas(cupo);
-    const saludo = res.nombre ? 'Hola, <b>'+esc(res.nombre)+'</b>. ' : '';
-    $('#cupoInfo').innerHTML=saludo+'Tu familia tiene <b>'+cupo+'</b> '+(cupo===1?'cupo disponible':'cupos disponibles')+'.';
-    $('#cupoInfo').hidden=false;
-    $('#resto').hidden=false;
+    mostrarCupo(nombre,cupo);
+    pintarInvitado(nombre,cupo);
   }catch(err){
     console.error(err);
-    mostrarError('#errCod','No pudimos cargar tu invitación. Inténtalo de nuevo en un momento.');
+    if(!codigoActual) mostrarError('#errCod','No pudimos verificar tu enlace. Inténtalo de nuevo en un momento.');
   }
 }
 
-const codigoEnlace=(new URLSearchParams(location.search).get('c')||'').trim().toUpperCase();
-if(codigoEnlace){ cargarInvitacion(codigoEnlace); }
-else { mostrarError('#errCod','Abre el enlace que te enviamos para confirmar tu asistencia.'); }
+// Datos que vienen en el enlace: se muestran al instante y luego se verifican en el script
+const _p=new URLSearchParams(location.search);
+const codigoEnlace=(_p.get('c')||'').trim().toUpperCase();
+const nombreEnlace=(_p.get('n')||'').trim();
+const cupoEnlace=Number(_p.get('k'))||0;
+
+function pintarInvitado(nombre,n){
+  $('#gNombre').textContent=nombre;
+  $('#gReserva').textContent='Hemos reservado '+n+' '+(n===1?'lugar':'lugares')+' en tu honor';
+  $('#guest').hidden=false;
+}
+
+function mostrarCupo(nombre,cupo){
+  llenarPersonas(cupo);
+  $('#cupoInfo').innerHTML=(nombre?'Hola, <b>'+esc(nombre)+'</b>. ':'')+'Tu familia tiene <b>'+cupo+'</b> '+(cupo===1?'cupo disponible':'cupos disponibles')+'.';
+  $('#cupoInfo').hidden=false;
+  $('#resto').hidden=false;
+}
+
+if(codigoEnlace){
+  if(nombreEnlace && cupoEnlace>0){
+    codigoActual=codigoEnlace;
+    mostrarCupo(nombreEnlace,cupoEnlace);
+    pintarInvitado(nombreEnlace,cupoEnlace);
+  }
+  cargarInvitacion(codigoEnlace);
+} else {
+  mostrarError('#errCod','Abre el enlace que te enviamos para confirmar tu asistencia.');
+}
 
 function mensajeError(code){
   switch(code){
@@ -330,19 +361,7 @@ $('#f').addEventListener('submit', async e=>{
 });
 function esc(t){return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-(async()=>{
-  const c=(new URLSearchParams(location.search).get('c')||'').trim().toUpperCase();
-  if(!c) return;
-  try{
-    const r=await fetch(ENDPOINT+'?accion=verificar&codigo='+encodeURIComponent(c));
-    const res=await r.json();
-    if(!res.valido) return;
-    const n=Number(res.cupo)||0;
-    $('#gNombre').textContent=res.nombre||'';
-    $('#gReserva').textContent='Hemos reservado '+n+' '+(n==1?'lugar':'lugares')+' en tu honor';
-    $('#guest').hidden=false;
-  }catch(e){ console.error(e); }
-})();
+
 </script>
 </body>
 </html>
