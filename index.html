@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación a mi grado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-1: #0b1d33;
+    --navy-2: #14365c;
+    --gold: #d4af37;
+    --gold-soft: #f1dc8f;
+    --cream: #f7f1e3;
+    --muted: #b8c2d1;
+    --glass: rgba(255, 255, 255, .06);
+    --line: rgba(212, 175, 55, .35);
+    --ok: #7fd6a0;
+    --err: #ff8a80;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Montserrat", "Segoe UI", system-ui, sans-serif;
+    font-weight: 300;
+    color: var(--cream);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(212,175,55,.18), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(46,109,164,.35), transparent 60%),
+      linear-gradient(180deg, var(--navy-2), var(--navy-1));
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 580px; margin: 0 auto; padding: 28px 18px 56px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 46px 24px 40px;
+    border-radius: 24px;
+    background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border: 1px solid var(--line);
+    box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 0 0 6px rgba(11,29,51,.4), inset 0 0 0 7px rgba(212,175,55,.25);
+    animation: subir .9s ease both;
+  }
+  .birrete { font-size: 46px; filter: drop-shadow(0 4px 12px rgba(212,175,55,.35)); }
+  .tag {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+  .hero h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 1.05;
+    margin: 12px 0 8px;
+    background: linear-gradient(120deg, #fff6d5, var(--gold), #fff6d5);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .programa { margin: 0; color: var(--muted); font-size: 14px; letter-spacing: .5px; }
+  .ornamento {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    margin: 20px auto 0; color: var(--gold);
+  }
+  .ornamento::before, .ornamento::after {
+    content: ""; height: 1px; width: 70px; background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .ornamento::after { transform: scaleX(-1); }
+  .invita { margin: 18px 0 0; font-family: "Cormorant Garamond", Georgia, serif; font-size: 20px; font-style: italic; color: var(--cream); }
+
+  /* ---------- CUENTA REGRESIVA ---------- */
+  .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 22px; }
+  .countdown div {
+    background: var(--glass); border: 1px solid var(--line); border-radius: 14px; padding: 12px 4px;
+  }
+  .countdown b { display: block; font-family: "Cormorant Garamond", serif; font-size: 30px; color: var(--gold-soft); line-height: 1; }
+  .countdown span { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+  /* ---------- TARJETAS ---------- */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 26px 24px;
+    margin-top: 18px;
+    backdrop-filter: blur(6px);
+    animation: subir .9s ease both;
+  }
+  .card:nth-of-type(2) { animation-delay: .1s; }
+  .card:nth-of-type(3) { animation-delay: .2s; }
+  h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 700; font-size: 28px; margin: 0 0 6px; color: var(--gold-soft);
+  }
+  .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+
+  .detalle { display: grid; gap: 14px; margin-top: 6px; }
+  .detalle .fila { display: flex; gap: 14px; align-items: center; }
+  .detalle .icono {
+    width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px;
+    background: rgba(212,175,55,.12); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+  .detalle small { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .detalle strong { font-weight: 600; font-size: 15px; }
+
+  .btn-calendario {
+    display: inline-block; margin-top: 16px; font-size: 13px; color: var(--gold-soft);
+    text-decoration: none; border-bottom: 1px dashed var(--gold); padding-bottom: 2px;
+  }
+
+  /* ---------- FORMULARIO ---------- */
+  form label { display: block; font-weight: 600; font-size: 13px; letter-spacing: .5px; margin: 18px 0 8px; color: var(--cream); }
+  form input[type="text"], form input[type="number"], form textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(5,15,30,.55);
+    color: var(--cream);
+    font: inherit;
+    font-size: 15px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  form input::placeholder, form textarea::placeholder { color: #7f8ba0; }
+  form input:focus, form textarea:focus {
+    outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,.2);
+  }
+  form textarea { min-height: 84px; resize: vertical; }
+
+  .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .opciones label {
+    margin: 0; cursor: pointer; text-align: center; font-weight: 400;
+    border: 1px solid rgba(255,255,255,.15); border-radius: 14px; padding: 16px 10px;
+    background: rgba(5,15,30,.4); transition: all .2s;
+  }
+  .opciones label:hover { border-color: var(--gold); }
+  .opciones input { position: absolute; opacity: 0; pointer-events: none; }
+  .opciones label:has(input:checked) {
+    border-color: var(--gold);
+    background: linear-gradient(160deg, rgba(212,175,55,.25), rgba(212,175,55,.08));
+    box-shadow: 0 0 0 2px rgba(212,175,55,.25);
+    font-weight: 600; color: #fff;
+  }
+  .opciones label .emoji { display: block; font-size: 24px; margin-bottom: 4px; }
+
+  .contador { display: flex; align-items: center; gap: 12px; }
+  .contador button.paso {
+    width: 44px; height: 44px; margin: 0; padding: 0; border-radius: 12px; font-size: 22px;
+    background: rgba(212,175,55,.15); color: var(--gold-soft); border: 1px solid var(--line);
+  }
+  .contador input { width: 80px !important; text-align: center; }
+
+  button.enviar {
+    margin-top: 24px; width: 100%; padding: 16px; border: none; border-radius: 14px;
+    background: linear-gradient(120deg, #e9c74d, var(--gold), #b8921f);
+    color: #1b1400; font: inherit; font-size: 15px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 25px rgba(212,175,55,.3);
+    transition: transform .15s, box-shadow .15s;
+  }
+  button.enviar:hover { transform: translateY(-1px); box-shadow: 0 14px 30px rgba(212,175,55,.4); }
+  button.enviar:disabled { opacity: .6; cursor: default; transform: none; }
+
+  .estado { margin-top: 14px; font-size: 14px; min-height: 22px; text-align: center; }
+  .estado.ok { color: var(--ok); }
+  .estado.err { color: var(--err); }
+
+  /* ---------- GRACIAS ---------- */
+  .gracias { text-align: center; display: none; }
+  .gracias .check { font-size: 58px; }
+  .gracias p { color: var(--muted); }
+
+  .pie { text-align: center; color: var(--muted); font-size: 13px; margin-top: 28px; letter-spacing: .5px; }
+  .pie b { color: var(--gold-soft); font-weight: 600; }
+
+  @keyframes subir { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 38px; }
+    .countdown b { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ==================== CONFIGURACIÓN (edita aquí) ==================== -->
+  <script>
+    const CONFIG = {
+      graduado:   "[Tu nombre]",
+      programa:   "Maestría en Analítica y Ciencia de Datos",
+      fecha:      "[Día, fecha]",           // texto que se muestra
+      hora:       "[Hora]",
+      lugar:      "[Lugar / dirección]",
+      fechaISO:   "2026-12-15T18:00:00",    // fecha real para la cuenta regresiva y el calendario (AAAA-MM-DDTHH:MM:SS)
+      // URL del Apps Script (termina en /exec). Déjala vacía mientras pruebas.
+      endpoint:   "https://script.google.com/macros/s/AKfycbx5JWLLqT0aG0utAz4A28Zn7ahAQc8mRNE6kIA7kmBjF1GAHYEj2NYUT6puUM6J8eYF/exec",
+      // Opcional: enlace de respaldo (por ejemplo, Microsoft Forms)
+      formsRespaldo: ""
+    };
+  </script>
+
+  <section class="hero">
+    <div class="birrete">🎓</div>
+    <div class="tag">Te invito a celebrar</div>
+    <h1 id="h-graduado"></h1>
+    <p class="programa" id="h-programa"></p>
+    <div class="ornamento"></div>
+    <p class="invita">Acompáñame en este momento tan especial</p>
+
+    <div class="countdown" id="cuenta" hidden>
+      <div><b id="c-dias">0</b><span>Días</span></div>
+      <div><b id="c-horas">0</b><span>Horas</span></div>
+      <div><b id="c-min">0</b><span>Min</span></div>
+      <div><b id="c-seg">0</b><span>Seg</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Detalles del evento</h2>
+    <div class="detalle">
+      <div class="fila"><span class="icono">📅</span><div><small>Fecha</small><strong id="d-fecha"></strong></div></div>
+      <div class="fila"><span class="icono">🕐</span><div><small>Hora</small><strong id="d-hora"></strong></div></div>
+      <div class="fila"><span class="icono">📍</span><div><small>Lugar</small><strong id="d-lugar"></strong></div></div>
+    </div>
+    <a class="btn-calendario" id="cal" href="#" target="_blank" rel="noopener">+ Agregar a mi calendario</a>
+  </section>
+
+  <!-- ==================== FORMULARIO ==================== -->
+  <section class="card" id="bloque-form">
+    <h2>Confirma tu asistencia</h2>
+    <p class="sub">Por favor responde antes del día del evento. ¡Gracias!</p>
+
+    <form id="form" autocomplete="off">
+      <label for="nombre">Nombre completo *</label>
+      <input type="text" id="nombre" maxlength="120" required placeholder="Ej. María López">
+
+      <label>¿Asistirás? *</label>
+      <div class="opciones">
+        <label><input type="radio" name="asiste" value="Sí" required><span class="emoji">✨</span>Sí, asistiré</label>
+        <label><input type="radio" name="asiste" value="No"><span class="emoji">💌</span>No podré ir</label>
+      </div>
+
+      <label>Número de acompañantes</label>
+      <div class="contador">
+        <button type="button" class="paso" id="menos">−</button>
+        <input type="number" id="acompanantes" min="0" max="10" value="0">
+        <button type="button" class="paso" id="mas">+</button>
+      </div>
+
+      <label for="mensaje">Un mensaje para mí (opcional)</label>
+      <textarea id="mensaje" maxlength="500" placeholder="Escribe unas palabras…"></textarea>
+
+      <button type="submit" class="enviar" id="btn">Confirmar asistencia</button>
+      <div class="estado" id="estado" role="status"></div>
+    </form>
+  </section>
+
+  <!-- ==================== GRACIAS ==================== -->
+  <section class="card gracias" id="gracias">
+    <div class="check">🎓</div>
+    <h2 id="g-titulo">¡Gracias por confirmar!</h2>
+    <p id="g-texto"></p>
+  </section>
+
+  <div class="pie">Con cariño, <b id="pie-nombre"></b></div>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  // ----- Datos del evento -----
+  $('h-graduado').textContent = CONFIG.graduado;
+  $('h-programa').textContent = CONFIG.programa;
+  $('d-fecha').textContent = CONFIG.fecha;
+  $('d-hora').textContent = CONFIG.hora;
+  $('d-lugar').textContent = CONFIG.lugar;
+  $('pie-nombre').textContent = CONFIG.graduado;
+
+  // ----- Cuenta regresiva y calendario -----
+  const fechaEvento = new Date(CONFIG.fechaISO);
+  if (!isNaN(fechaEvento)) {
+    $('cuenta').hidden = false;
+    const actualizar = () => {
+      const diff = Math.max(0, fechaEvento - new Date());
+      $('c-dias').textContent  = Math.floor(diff / 86400000);
+      $('c-horas').textContent = Math.floor(diff / 3600000) % 24;
+      $('c-min').textContent   = Math.floor(diff / 60000) % 60;
+      $('c-seg').textContent   = Math.floor(diff / 1000) % 60;
+    };
+    actualizar();
+    setInterval(actualizar, 1000);
+
+    const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const fin = new Date(fechaEvento.getTime() + 3 * 3600000);
+    $('cal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text=' + encodeURIComponent('Graduación: ' + CONFIG.programa)
+      + '&dates=' + fmt(fechaEvento) + '/' + fmt(fin)
+      + '&location=' + encodeURIComponent(CONFIG.lugar);
+  } else {
+    $('cal').style.display = 'none';
+  }
+
+  // ----- Contador de acompañantes -----
+  const acomp = $('acompanantes');
+  const ajustar = (d) => {
+    const v = Math.min(10, Math.max(0, (Number(acomp.value) || 0) + d));
+    acomp.value = v;
+  };
+  $('mas').addEventListener('click', () => ajustar(1));
+  $('menos').addEventListener('click', () => ajustar(-1));
+
+  // ----- Envío -----
+  const form = $('form');
+  const btn = $('btn');
+  const estado = $('estado');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    estado.className = 'estado';
+    estado.textContent = '';
+
+    const datos = {
+      nombre: $('nombre').value.trim(),
+      asiste: form.querySelector('input[name="asiste"]:checked')?.value || '',
+      acompanantes: Number(acomp.value) || 0,
+      mensaje: $('mensaje').value.trim(),
+      evento: CONFIG.programa
+    };
+
+    if (!datos.nombre || !datos.asiste) {
+      estado.className = 'estado err';
+      estado.textContent = 'Escribe tu nombre y elige una opción, por favor.';
+      return;
+    }
+    if (!CONFIG.endpoint) {
+      estado.className = 'estado err';
+      estado.textContent = 'La página aún no está conectada. Avísale a la persona organizadora.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+
+    try {
+      // text/plain evita el preflight de CORS que Apps Script no admite con application/json
+      const r = await fetch(CONFIG.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(datos)
+      });
+      const res = await r.json();
+      if (!res.ok) throw new Error(res.error || 'Respuesta inválida');
+
+      $('bloque-form').style.display = 'none';
+      $('gracias').style.display = 'block';
+      $('g-texto').textContent = datos.asiste === 'Sí'
+        ? `Tu confirmación quedó registrada, ${datos.nombre}. ¡Nos vemos en el evento!`
+        : `Gracias por avisar, ${datos.nombre}. Lamento que no puedas acompañarme.`;
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = 'Confirmar asistencia';
+      estado.className = 'estado err';
+      estado.textContent = CONFIG.formsRespaldo
+        ? 'No se pudo enviar. Usa este enlace alterno: ' + CONFIG.formsRespaldo
+        : 'No se pudo enviar. Intenta de nuevo en un momento.';
+    }
+  });
+</script>
+</body>
+</html>
