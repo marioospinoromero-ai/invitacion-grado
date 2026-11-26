@@ -88,6 +88,8 @@ body{background:#341624!important}
 .tarjeta-img{display:block;width:100%;max-width:520px;height:auto;margin:0 auto;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
 .bajar{display:block;width:max-content;margin:4px auto 20px;padding:10px 20px;border:1px solid #C9A24A;border-radius:30px;color:#EBD08A;text-decoration:none;font:600 17px 'Cormorant Garamond',serif;letter-spacing:.1em}
 #inv .tarjeta .msg{margin-top:58px}
+#inv .tarjeta-img{height:100vh;height:100svh;object-fit:contain}
+#inv .marco{scroll-margin-top:12px}
 </style>
 </head>
 <body>
@@ -142,7 +144,6 @@ body{background:#341624!important}
 
 <main id="inv">
   <img class="tarjeta-img" src="tarjeta.webp" width="864" height="1237" alt="Est&aacute;s invitado. Naiduth y Sharon, Negocios Internacionales y Derecho. Graduaci&oacute;n">
-  <a class="bajar" href="#f">Confirmar asistencia &darr;</a>
  <div class="marco"><div class="tarjeta">
   <svg class="fl a" viewBox="0 0 120 170"><use href="#hv" x="0" y="20" width="50" height="110" transform="rotate(-40 40 80)"/><use href="#ant" x="18" y="0" width="100" height="125"/></svg>
   <svg class="fl b" viewBox="0 0 120 170"><use href="#hv" x="30" y="30" width="50" height="110" transform="rotate(35 60 80)"/><use href="#ant" x="10" y="10" width="95" height="118"/></svg>
@@ -242,7 +243,10 @@ function loop(now){
  if(!fin)requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
-function abrir(){if(fin)return;fin=true;const e=$('#escena');e.style.transition='opacity .45s';e.style.opacity=0;setTimeout(()=>{mostrarInv();scrollTo(0,0);},450);}
+function abrir(){if(fin)return;fin=true;const e=$('#escena');e.style.transition='opacity .45s';e.style.opacity=0;setTimeout(()=>{mostrarInv();scrollTo(0,0);avanzar();},450);}
+// Muestra la imagen unos segundos y pasa a los datos del evento (se cancela si el invitado toca o desliza)
+const SEGUNDOS_IMAGEN=4;
+function avanzar(){let cancelado=false;const parar=()=>{cancelado=true;};['touchstart','wheel','keydown','pointerdown'].forEach(ev=>addEventListener(ev,parar,{once:true,passive:true}));setTimeout(()=>{if(!cancelado)document.querySelector('#inv .marco').scrollIntoView({behavior:'smooth',block:'start'});},SEGUNDOS_IMAGEN*1000);}
 $('#escena').addEventListener('click',abrir);
 $('#escena').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();}});
 function mostrarInv(){$('#escena').style.display='none';$('#inv').style.display='block';requestAnimationFrame(()=>$('#inv').classList.add('v'));window.scrollTo(0,0);}
