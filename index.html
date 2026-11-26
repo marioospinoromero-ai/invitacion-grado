@@ -245,7 +245,7 @@ function loop(now){
 requestAnimationFrame(loop);
 function abrir(){if(fin)return;fin=true;const e=$('#escena');e.style.transition='opacity .45s';e.style.opacity=0;setTimeout(()=>{mostrarInv();scrollTo(0,0);avanzar();},450);}
 // Muestra la imagen unos segundos y pasa a los datos del evento (se cancela si el invitado toca o desliza)
-const SEGUNDOS_IMAGEN=4;
+const SEGUNDOS_IMAGEN=6;
 function avanzar(){let cancelado=false;const parar=()=>{cancelado=true;};['touchstart','wheel','keydown','pointerdown'].forEach(ev=>addEventListener(ev,parar,{once:true,passive:true}));setTimeout(()=>{if(!cancelado)document.querySelector('#inv .marco').scrollIntoView({behavior:'smooth',block:'start'});},SEGUNDOS_IMAGEN*1000);}
 $('#escena').addEventListener('click',abrir);
 $('#escena').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();}});
