@@ -242,7 +242,7 @@ function loop(now){
  if(!fin)requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
-function abrir(){if(listo&&fase==='espera')fase='abre';}
+function abrir(){if(fin)return;fin=true;const e=$('#escena');e.style.transition='opacity .45s';e.style.opacity=0;setTimeout(()=>{mostrarInv();scrollTo(0,0);},450);}
 $('#escena').addEventListener('click',abrir);
 $('#escena').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();}});
 function mostrarInv(){$('#escena').style.display='none';$('#inv').style.display='block';requestAnimationFrame(()=>$('#inv').classList.add('v'));window.scrollTo(0,0);}
