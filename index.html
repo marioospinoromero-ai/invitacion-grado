@@ -738,7 +738,7 @@ function loop(now){
 requestAnimationFrame(loop);
 function abrir(){if(fin)return;fin=true;const e=$('#escena');e.style.transition='opacity .45s';e.style.opacity=0;setTimeout(()=>{document.body.classList.add('abierta');mostrarInv();scrollTo(0,0);avanzar();},450);}
 // Segunda pantalla: la imagen. Tras unos segundos (o al tocarla) pasa a la tercera: los datos y el formulario
-const SEGUNDOS_IMAGEN=6;
+const SEGUNDOS_IMAGEN=12;
 function avanzar(){const v=document.querySelector('#inv .visor'),d=document.querySelector('#v3');d.style.display='none';let hecho=false;const pasar=()=>{if(hecho)return;hecho=true;v.style.opacity=0;setTimeout(()=>{v.style.display='none';d.style.display='';d.style.opacity=0;scrollTo(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>{d.style.opacity=1;}));},500);};v.addEventListener('click',pasar,{once:true});setTimeout(pasar,SEGUNDOS_IMAGEN*1000);}
 $('#escena').addEventListener('click',abrir);
 $('#escena').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();}});
