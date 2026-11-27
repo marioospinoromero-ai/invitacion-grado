@@ -194,6 +194,12 @@ html:has(body.abierta){background:#62151D}
 #v3 .v3-lluvia{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;padding-top:22px;border-top:1px solid #E5DCCB;font:italic 600 22px/1.4 'Cormorant Garamond',serif;color:#4B1419}
 #v3 .v3-lluvia svg{width:22px;height:22px;stroke-width:1.5}
 #v3 #v3Lugar{white-space:pre-line;overflow-wrap:anywhere}
+#inv .visor{flex-direction:column;gap:4px;padding-bottom:12px}
+#inv .visor .tarjeta-img{width:min(100%,calc((100vh - 84px) * .6985));width:min(100%,calc((100svh - 84px) * .6985))}
+#inv .v2-clic{flex:0 0 auto;cursor:pointer;padding:12px 34px;border-radius:40px;border:1px solid #DFC38A;background:#FAF6EE;color:#4B1419;font:600 20px/1.2 'Cormorant Garamond',serif;letter-spacing:.12em;box-shadow:0 8px 22px -6px rgba(0,0,0,.55);animation:v2-latido 1.6s ease-in-out infinite}
+#inv .v2-clic:focus-visible{outline:2px solid #FAF6EE;outline-offset:3px}
+@keyframes v2-latido{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){#inv .v2-clic{animation:none}}
 </style>
 </head>
 <body>
@@ -596,7 +602,7 @@ html:has(body.abierta){background:#62151D}
   <ellipse cx="567" cy="1089" rx="11" ry="9" fill="url(#t-bronce)" transform="rotate(40 567 1089)"/>
   <path d="M557 1095 L575 1081 M561 1100 L579 1086" stroke="#5c4113" stroke-width="3"/><path d="M558 1094 L576 1080 M562 1099 L580 1085" stroke="#f8e19c" stroke-width="1.200"/>
 </g>
-</svg></div>
+</svg><button type="button" class="v2-clic">Clic aqu&iacute; <span aria-hidden="true">&rarr;</span></button></div>
  <div id="v3">
   <header class="v3-head">
     <p class="v3-eyebrow">Estás Invitado</p>
@@ -738,9 +744,8 @@ function loop(now){
 }
 requestAnimationFrame(loop);
 function abrir(){if(fin)return;fin=true;const e=$('#escena');e.style.transition='opacity .45s';e.style.opacity=0;setTimeout(()=>{document.body.classList.add('abierta');mostrarInv();scrollTo(0,0);avanzar();},450);}
-// Segunda pantalla: la imagen. Tras unos segundos (o al tocarla) pasa a la tercera: los datos y el formulario
-const SEGUNDOS_IMAGEN=12;
-function avanzar(){const v=document.querySelector('#inv .visor'),d=document.querySelector('#v3');d.style.display='none';let hecho=false;const pasar=()=>{if(hecho)return;hecho=true;v.style.opacity=0;setTimeout(()=>{v.style.display='none';d.style.display='';d.style.opacity=0;scrollTo(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>{d.style.opacity=1;}));},500);};v.addEventListener('click',pasar,{once:true});setTimeout(pasar,SEGUNDOS_IMAGEN*1000);}
+// Segunda pantalla: la tarjeta. Pasa a los datos y el formulario cuando el invitado da clic
+function avanzar(){const v=document.querySelector('#inv .visor'),d=document.querySelector('#v3');d.style.display='none';let hecho=false;const pasar=()=>{if(hecho)return;hecho=true;v.style.opacity=0;setTimeout(()=>{v.style.display='none';d.style.display='';d.style.opacity=0;scrollTo(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>{d.style.opacity=1;}));},500);};v.addEventListener('click',pasar,{once:true});}
 $('#escena').addEventListener('click',abrir);
 $('#escena').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();}});
 function mostrarInv(){$('#escena').style.display='none';$('#inv').style.display='block';requestAnimationFrame(()=>$('#inv').classList.add('v'));window.scrollTo(0,0);}
