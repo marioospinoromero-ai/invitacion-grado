@@ -193,6 +193,7 @@ html:has(body.abierta){background:#62151D}
 #v3 .v3-vestimenta p{font:600 26px/1.3 'Cormorant Garamond',serif;margin-top:2px}
 #v3 .v3-lluvia{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;padding-top:22px;border-top:1px solid #E5DCCB;font:italic 600 22px/1.4 'Cormorant Garamond',serif;color:#4B1419}
 #v3 .v3-lluvia svg{width:22px;height:22px;stroke-width:1.5}
+#v3 #v3Lugar{white-space:pre-line;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -616,7 +617,7 @@ html:has(body.abierta){background:#62151D}
       <div class="v3-detalles">
         <div class="v3-dato"><span class="v3-etq">Fecha</span><p>Sábado 19<br>de diciembre</p><small>2026</small></div>
         <div class="v3-dato"><span class="v3-etq">Hora</span><p class="grande">8:00 p. m.</p><small>Recepción puntual</small></div>
-        <div class="v3-dato"><span class="v3-etq">Lugar</span><p>Fundación Magdalena</p></div>
+        <div class="v3-dato"><span class="v3-etq">Lugar</span><p id="v3Lugar">Fundación Magdalena</p></div>
       </div>
 
       <div class="v3-extras">
@@ -815,6 +816,8 @@ async function cargarInvitacion(){
   try{
     const r=await fetch(ENDPOINT+'?accion=verificar&codigo='+encodeURIComponent(codigoEnlace));
     const res=await r.json();
+    // El lugar se escribe en la hoja (pestana Evento, celda B2)
+    if(res.lugar) v('v3Lugar').textContent=res.lugar;
     if(!res.valido || !(Number(res.cupo)>0)){
       v('guest').hidden=true;
       bloquear('Este enlace no es válido. Revisa que esté completo o escríbenos por WhatsApp.');
